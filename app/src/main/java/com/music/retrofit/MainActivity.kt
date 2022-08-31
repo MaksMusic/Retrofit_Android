@@ -39,18 +39,17 @@ class MainActivity : AppCompatActivity() {
                 call: Call<List<com.music.retrofit.Message>>,
                 response: Response<List<com.music.retrofit.Message>>
             ) {
-                response.body().let {
-                    if (response.isSuccessful) {
+                if (response.isSuccessful) {
+
                         response.body()?.let {
-                            for (message in it) {
-                              adapterMessage.addMess(message)
+                            adapterMessage.addMessList(it)
                                // Log.e("sms", message.id.toString())
-                            }
+
                         }
                     }else{
                         Log.e("sms", response.errorBody().toString())
                     }
-                }
+
 
             }
 

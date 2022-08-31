@@ -15,6 +15,11 @@ class AdapterMessage () : RecyclerView.Adapter<AdapterMessage.ViewHolder>(){
         list.add(message)
         notifyDataSetChanged()
     }
+
+    fun addMessList(list2:List<Message>){
+        list.addAll(list2)
+        notifyDataSetChanged()
+    }
     inner class ViewHolder(var binding: ItemBinding):RecyclerView.ViewHolder(binding.root){
        fun addMessage(message: Message){
            binding.text.text = message.text
