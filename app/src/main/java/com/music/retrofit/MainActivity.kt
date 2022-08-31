@@ -4,6 +4,8 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Message
 import android.util.Log
+import androidx.recyclerview.widget.RecyclerView
+import com.music.retrofit.adapter.AdapterMessage
 import com.music.retrofit.databinding.ActivityMainBinding
 import retrofit2.Call
 import retrofit2.Callback
@@ -16,19 +18,22 @@ class MainActivity : AppCompatActivity() {
     lateinit var binding: ActivityMainBinding
     lateinit var retrofit: Retrofit
     lateinit var servisesApi: ServisesApi
+    private  var adapterMessage:AdapterMessage = AdapterMessage()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        //init
+        binding.recycler.adapter = adapterMessage
 
         retrofit =
             Retrofit.Builder().baseUrl("https://rawgit.com/startandroid/data/master/messages/")
                 .addConverterFactory(GsonConverterFactory.create()).build()
         servisesApi = retrofit.create(ServisesApi::class.java)
-
-
         var messageCall = servisesApi.message()
+
+        //получение данных
         messageCall.enqueue(object : Callback<List<com.music.retrofit.Message>> {
             override fun onResponse(
                 call: Call<List<com.music.retrofit.Message>>,
@@ -38,7 +43,8 @@ class MainActivity : AppCompatActivity() {
                     if (response.isSuccessful) {
                         response.body()?.let {
                             for (message in it) {
-                                Log.e("sms", message.id.toString())
+                              adapterMessage.addMess(message)
+                               // Log.e("sms", message.id.toString())
                             }
                         }
                     }else{
@@ -48,7 +54,7 @@ class MainActivity : AppCompatActivity() {
 
             }
 
-
+            //exeption
             override fun onFailure(call: Call<List<com.music.retrofit.Message>>, t: Throwable) {
                 Log.e("sms", "error ")
             }
