@@ -5,6 +5,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.music.retrofit.Message
 import com.music.retrofit.databinding.ItemBinding
+import com.squareup.picasso.Picasso
 
 class AdapterMessage () : RecyclerView.Adapter<AdapterMessage.ViewHolder>(){
 
@@ -12,11 +13,14 @@ class AdapterMessage () : RecyclerView.Adapter<AdapterMessage.ViewHolder>(){
 
     fun addMess(message: Message){
         list.add(message)
+        notifyDataSetChanged()
     }
     inner class ViewHolder(var binding: ItemBinding):RecyclerView.ViewHolder(binding.root){
        fun addMessage(message: Message){
-           list.add(message)
-           notifyDataSetChanged()
+           binding.text.text = message.text
+           binding.id.text = message.id.toString()
+           Picasso.get().load(message.image).into(binding.image)
+
 
         }
 
